@@ -60,3 +60,8 @@ install(
   DIRECTORY include/
   DESTINATION include/${PROJECT_NAME}
 )
+
+install(
+  TARGETS ${PROJECT_NAME}_exec
+  DESTINATION lib/${PROJECT_NAME}
+)
