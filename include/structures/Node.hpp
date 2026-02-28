@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include <geometry_msgs/Point.h>
-#include <custom_msgs/ConeWithId.h>
-#include <ros/ros.h>
+#include <geometry_msgs/msg/point.hpp>
+#include <feb_msgs/msg/cone.hpp>
+#include <rclcpp/rclcpp.hpp>
 
 #include <Eigen/Geometry>
 #include <cmath>
@@ -88,7 +88,7 @@ class Node {
    *
    * @param[in] c
    */
-  Node(const custom_msgs::ConeWithId &c);
+  Node(const feb_msgs::msg::Cone &c, const uint32_t id);
 
   /**
    * @brief Returns the Node x local coordinate.

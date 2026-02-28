@@ -10,11 +10,11 @@
 
 #pragma once
 
-#include <custom_msgs/PathLimits.h>
-#include <nav_msgs/Odometry.h>
-#include <eigen_conversions/eigen_msg.h>
-#include <ros/ros.h>
-#include <tf/transform_datatypes.h>
+// #include <custom_msgs/PathLimits.h>
+#include <nav_msgs/msg/odometry.hpp>
+#include "rclcpp/rclcpp.hpp"
+#include <tf2/transform_datatypes.h>
+#include <tf2_eigen/tf2_eigen.hpp>
 
 #include <fstream>
 #include <queue>
@@ -61,7 +61,7 @@ class WayComputer {
   /**
    * @brief Last data timestamp.
    */
-  std_msgs::Header lastHeader_;
+  std_msgs::msg::Header lastHeader_;
 
   /**
    * @brief Whether or not \a way_ has its loop closed.
@@ -156,7 +156,7 @@ class WayComputer {
    *
    * @param[in] data
    */
-  void stateCallback(const nav_msgs::Odometry::ConstPtr &data);
+  void stateCallback(const nav_msgs::msg::Odometry::ConstSharedPtr &data);
 
   /**
    * @brief Takes the Delaunay triangle set and computes the Way.
@@ -164,7 +164,7 @@ class WayComputer {
    * @param[in,out] triangulation
    * @param[in] header
    */
-  void update(TriangleSet &triangulation, const std_msgs::Header &header);
+  void update(TriangleSet &triangulation, const std_msgs::msg::Header &header);
 
   /**
    * @brief Returns if the loop has been closed.
@@ -202,5 +202,5 @@ class WayComputer {
    * @brief Returns the centerline and track limits in custom_msgs format
    * in global coordinates.
    */
-  custom_msgs::PathLimits getPathLimits() const;
+  // custom_msgs::PathLimits getPathLimits() const;
 };

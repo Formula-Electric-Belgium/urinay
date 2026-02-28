@@ -1,25 +1,31 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.5)
 project(urinay)
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(feb_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_eigen REQUIRED)
+find_package(visualization_msgs REQUIRED)
+find_package(ament_index_cpp REQUIRED)
 
-add_compile_options(-std=c++14)
+find_package(Eigen3 REQUIRED)
+
+add_compile_options(-std=c++17)
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast")
 set(CMAKE_BUILD_TYPE "Release")
 
-find_package(catkin REQUIRED COMPONENTS roscpp std_msgs custom_msgs sensor_msgs roslib eigen_conversions)
-find_package(Eigen3 REQUIRED)
-
-catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME}
-)
-
+include_directories(${EIGEN3_INCLUDE_DIR})
 include_directories(
   include
-  ${catkin_INCLUDE_DIRS}
 )
 
 add_executable(${PROJECT_NAME}_exec src/main.cpp)
+
 add_library(${PROJECT_NAME}
   src/structures/Point.cpp
   src/structures/Node.cpp
@@ -37,20 +43,20 @@ add_library(${PROJECT_NAME}
   src/utils/Failsafe.cpp
   src/utils/KDTree.cpp
 )
-
-add_dependencies(${PROJECT_NAME}_exec custom_msgs_generate_messages_cpp)
-add_dependencies(${PROJECT_NAME} custom_msgs_generate_messages_cpp)
-
-target_link_libraries(${PROJECT_NAME}_exec ${catkin_LIBRARIES} ${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+ament_target_dependencies(${PROJECT_NAME} "nav_msgs" "geometry_msgs" "tf2_ros" "rclcpp" "feb_msgs" "visualization_msgs" "Eigen3" "tf2_eigen" "ament_index_cpp")
+ament_target_dependencies(${PROJECT_NAME}_exec "nav_msgs" "geometry_msgs" "tf2_ros" "rclcpp" "feb_msgs" "visualization_msgs" "Eigen3" "tf2_eigen" "ament_index_cpp")
+target_link_libraries(${PROJECT_NAME}_exec ${PROJECT_NAME})
+ament_export_include_directories(include)
+ament_export_libraries(${PROJECT_NAME})
+ament_package()
 
 install(
   TARGETS ${PROJECT_NAME}
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
 )
 install(
   DIRECTORY include/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  DESTINATION include/${PROJECT_NAME}
 )

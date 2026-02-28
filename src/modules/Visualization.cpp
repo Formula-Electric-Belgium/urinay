@@ -19,26 +19,27 @@ Visualization &Visualization::getInstance() {
   return vis;
 }
 
-void Visualization::init(ros::NodeHandle *const nh, const Params::Visualization &params) {
+void Visualization::init(rclcpp::Node::SharedPtr const nh, const Params::Visualization &params) {
   params_ = params;
   if (params.publish_markers) {
-    trianglesPub = nh->advertise<visualization_msgs::MarkerArray>(params_.triangulation_topic, 1);
-    wayPub = nh->advertise<visualization_msgs::MarkerArray>(params_.way_topic, 1);
-    traceBufferPub = nh->advertise<visualization_msgs::MarkerArray>(params_.treeSearch_topic, 1);
+    trianglesPub = nh->create_publisher<visualization_msgs::msg::MarkerArray>(params_.triangulation_topic, 1);
+    wayPub = nh->create_publisher<visualization_msgs::msg::MarkerArray>(params_.way_topic, 1);
+    traceBufferPub = nh->create_publisher<visualization_msgs::msg::MarkerArray>(params_.treeSearch_topic, 1);
+    nh_ = nh;
   }
 }
 
-void Visualization::setHeader(const std_msgs::Header &header) {
+void Visualization::setHeader(const std_msgs::msg::Header &header) {
   this->lastHeader_ = header;
 }
 
 void Visualization::visualize(const EdgeSet &edgeSet) const {
   if (not this->params_.publish_markers) return;
-  if (trianglesPub.getNumSubscribers() <= 0) return;
+  if (trianglesPub->get_subscription_count() <= 0) return;
 
-  visualization_msgs::MarkerArray ma;
+  visualization_msgs::msg::MarkerArray ma;
   ma.markers.reserve(1 + 1 + 1);  // delete, lines & midpoints
-  visualization_msgs::Marker mLines, mMidpoint;
+  visualization_msgs::msg::Marker mLines, mMidpoint;
   size_t id = 0;
   mLines.header = this->lastHeader_;
   mLines.color.a = 1.0;
@@ -46,13 +47,13 @@ void Visualization::visualize(const EdgeSet &edgeSet) const {
   mLines.pose.orientation.w = 1.0;
   mLines.scale.x = 0.1;
   mLines.id = id++;
-  mLines.action = visualization_msgs::Marker::DELETEALL;
-  mLines.type = visualization_msgs::Marker::LINE_LIST;
+  mLines.action = visualization_msgs::msg::Marker::DELETEALL;
+  mLines.type = visualization_msgs::msg::Marker::LINE_LIST;
   ma.markers.push_back(mLines);
-  mLines.action = visualization_msgs::Marker::ADD;
+  mLines.action = visualization_msgs::msg::Marker::ADD;
 
   mMidpoint = mLines;
-  mMidpoint.type = visualization_msgs::Marker::POINTS;
+  mMidpoint.type = visualization_msgs::msg::Marker::POINTS;
   mMidpoint.scale.x = 0.1;
   mMidpoint.scale.y = 0.1;
   mMidpoint.color.r = 0.0;
@@ -75,16 +76,16 @@ void Visualization::visualize(const EdgeSet &edgeSet) const {
   }
   ma.markers.push_back(mLines);
   ma.markers.push_back(mMidpoint);
-  trianglesPub.publish(ma);
+  trianglesPub->publish(ma);
 }
 
 void Visualization::visualize(const Trace &way) const {
   if (not this->params_.publish_markers) return;
-  if (wayPub.getNumSubscribers() <= 0) return;
+  if (wayPub->get_subscription_count() <= 0) return;
 
-  visualization_msgs::MarkerArray ma;
+  visualization_msgs::msg::MarkerArray ma;
   ma.markers.reserve(3 * way.size() + 1);
-  visualization_msgs::Marker mMidpoints, mLeft, mRight;
+  visualization_msgs::msg::Marker mMidpoints, mLeft, mRight;
   size_t id = 0;
   mMidpoints.header = this->lastHeader_;
   mMidpoints.color.a = 1.0;
@@ -93,11 +94,11 @@ void Visualization::visualize(const Trace &way) const {
   mMidpoints.scale.x = 0.15;
   mMidpoints.scale.y = 0.15;
   mMidpoints.scale.z = 0.15;
-  mMidpoints.type = visualization_msgs::Marker::LINE_STRIP;
+  mMidpoints.type = visualization_msgs::msg::Marker::LINE_STRIP;
   mMidpoints.id = id++;
-  mMidpoints.action = visualization_msgs::Marker::DELETEALL;
+  mMidpoints.action = visualization_msgs::msg::Marker::DELETEALL;
   ma.markers.push_back(mMidpoints);
-  mMidpoints.action = visualization_msgs::Marker::ADD;
+  mMidpoints.action = visualization_msgs::msg::Marker::ADD;
   mLeft = mMidpoints;
   mLeft.color.g = 0.0;
   mLeft.color.b = 0.7;
@@ -129,18 +130,18 @@ void Visualization::visualize(const Trace &way) const {
   }
   ma.markers.push_back(mRight);
 
-  wayPub.publish(ma);
+  wayPub->publish(ma);
 }
 
 void Visualization::visualize(const TraceBuffer &traceBuffer) const {
   if (!this->params_.publish_markers or !this->params_.visualize_treeSearch) return;
-  if (traceBufferPub.getNumSubscribers() <= 0) return;
+  if (traceBufferPub->get_subscription_count() <= 0) return;
 
-  ROS_WARN_STREAM("Visualizing " << traceBuffer.size() << " traces...");
+  RCLCPP_WARN_STREAM(nh_->get_logger(), "Visualizing " << traceBuffer.size() << " traces...");
 
-  visualization_msgs::MarkerArray ma;
+  visualization_msgs::msg::MarkerArray ma;
   ma.markers.reserve(traceBuffer.size() + 1);
-  visualization_msgs::Marker mTrace;
+  visualization_msgs::msg::Marker mTrace;
   size_t id = 0;
   mTrace.header = this->lastHeader_;
   mTrace.color.a = 1.0;
@@ -150,11 +151,11 @@ void Visualization::visualize(const TraceBuffer &traceBuffer) const {
   mTrace.scale.x = 0.15;
   mTrace.scale.y = 0.15;
   mTrace.scale.z = 0.15;
-  mTrace.type = visualization_msgs::Marker::LINE_STRIP;
+  mTrace.type = visualization_msgs::msg::Marker::LINE_STRIP;
   mTrace.id = id++;
-  mTrace.action = visualization_msgs::Marker::DELETEALL;
+  mTrace.action = visualization_msgs::msg::Marker::DELETEALL;
   ma.markers.push_back(mTrace);
-  mTrace.action = visualization_msgs::Marker::ADD;
+  mTrace.action = visualization_msgs::msg::Marker::ADD;
 
   for (const TraceWithBuffer &twb : traceBuffer) {
     mTrace.points.clear();
@@ -171,6 +172,6 @@ void Visualization::visualize(const TraceBuffer &traceBuffer) const {
     ma.markers.push_back(mTrace);
   }
 
-  traceBufferPub.publish(ma);
-  ros::WallDuration(0.2).sleep();
+  traceBufferPub->publish(ma);
+  rclcpp::sleep_for(std::chrono::milliseconds(200));
 }

@@ -13,13 +13,14 @@
 std::map<std::string, Logger::Task> Logger::tasks_;
 std::queue<std::string> Logger::info_msgs_, Logger::warn_msgs_;
 bool Logger::print_immediately;
+rclcpp::Node::SharedPtr Logger::nh_;
 
 void Logger::tick(const std::string &clockName) {
-  ros::WallTime now = ros::WallTime::now();
+  rclcpp::Time now = nh_->now();
   std::map<std::string, Task>::iterator it = tasks_.find(clockName);
   if (it != tasks_.end()) {
     if (it->second.active) {
-      ROS_WARN("[urinay] Called tick() two times with same clockName before calling tock()");
+      RCLCPP_WARN(nh_->get_logger(), "[urinay] Called tick() two times with same clockName before calling tock()");
     }
     else {
       it->second.activate(now);
@@ -29,29 +30,29 @@ void Logger::tick(const std::string &clockName) {
   }
 }
 
-ros::WallDuration Logger::tock(const std::string &clockName) {
-  ros::WallTime now = ros::WallTime::now();
+rclcpp::Duration Logger::tock(const std::string &clockName) {
+  rclcpp::Time now = nh_->now();
   std::map<std::string, Task>::iterator it = tasks_.find(clockName);
   if (it == tasks_.end()) {
-    ROS_ERROR("[urinay] Called tock() before calling tick()");
-    return ros::WallDuration(0.0);
+    RCLCPP_ERROR(nh_->get_logger(), "[urinay] Called tock() before calling tick()");
+    return rclcpp::Duration(0, 0);
   } else {
-    ros::WallDuration duration = it->second.stop(now);
-    if (print_immediately) ROS_INFO_STREAM("[urinay] " << clockName << " has taken: " << duration.toSec() * 1e3 << "ms");
+    rclcpp::Duration duration = it->second.stop(now);
+    if (print_immediately) RCLCPP_INFO_STREAM(nh_->get_logger(), "[urinay] " << clockName << " has taken: " << duration.seconds() * 1e3 << "ms");
     return duration;
   }
 }
 
 void Logger::loginfo(const std::string &msg) {
   if (print_immediately)
-    ROS_INFO_STREAM("[urinay] " << msg);
+    RCLCPP_INFO_STREAM(nh_->get_logger(), "[urinay] " << msg);
   else
     info_msgs_.push(msg);
 }
 
 void Logger::logwarn(const std::string &msg) {
   if (print_immediately)
-    ROS_WARN_STREAM("[urinay] " << msg);
+    RCLCPP_WARN_STREAM(nh_->get_logger(), "[urinay] " << msg);
   else
     warn_msgs_.push(msg);
 }
@@ -74,9 +75,9 @@ void Logger::print_report() {
   for (const auto& pair : tasks_) {
     const Task& chrono = pair.second;
     to_print << "| " << std::setw(21) << std::left << pair.first
-             << std::setw(11) << chrono.last_duration.toSec() * 1e3
-             << std::setw(11) << chrono.max_duration.toSec() * 1e3
-             << std::setw(11) << (chrono.total_time_active.toSec() * 1e3) / chrono.count << "|\n";
+             << std::setw(11) << chrono.last_duration.seconds() * 1e3
+             << std::setw(11) << chrono.max_duration.seconds() * 1e3
+             << std::setw(11) << (chrono.total_time_active.seconds() * 1e3) / chrono.count << "|\n";
   }
 
   to_print << "+-------------------------------------------------------+\n";
@@ -99,5 +100,5 @@ void Logger::print_report() {
 
   to_print << "+-------------------------------------------------------+\n";
   
-  ROS_INFO_STREAM('\n' << to_print.str());
+  RCLCPP_INFO_STREAM(nh_->get_logger(), '\n' << to_print.str());
 }

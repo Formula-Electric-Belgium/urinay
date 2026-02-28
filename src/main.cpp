@@ -8,11 +8,8 @@
  * @copyright Copyright (c) 2022 BCN eMotorsport
  */
 
-#include <custom_msgs/ConeWithIdArray.h>
-#include <custom_msgs/ConeWithId.h>
-#include <custom_msgs/PathLimits.h>
-#include <ros/package.h>
-#include <ros/ros.h>
+#include <feb_msgs/msg/track.hpp>
+#include "rclcpp/rclcpp.hpp"
 #include <sys/stat.h>
 
 #include <iostream>
@@ -23,21 +20,21 @@
 #include "utils/Logger.hpp"
 
 // Publishers are initialized here
-ros::Publisher pubPartial;
-ros::Publisher pubFull;
+// rclcpp::Publisher<custom_msgs::msg::PathLimits>::SharedPtr pubPartial;
+// rclcpp::Publisher<custom_msgs::msg::PathLimits>::SharedPtr pubFull;
 
 WayComputer *wayComputer;
 Params *params;
 
 // This is the map callback
-void mapCallback(const custom_msgs::ConeWithIdArray::ConstPtr &data) {
+void mapCallback(const feb_msgs::msg::Track::ConstSharedPtr & data) {
   if (not wayComputer->isLocalTfValid()) {
     Logger::logwarn("CarState not being received.");
     if (params->main.verbose)
       Logger::print_report();
     return;
   }
-  if (data->cones.empty()) {
+  if (data->track.empty()) {
     Logger::logwarn("Reading empty set of cones.");
     if (params->main.verbose)
       Logger::print_report();
@@ -48,9 +45,11 @@ void mapCallback(const custom_msgs::ConeWithIdArray::ConstPtr &data) {
 
   // Convert to Node vector
   std::vector<Node> nodes;
-  nodes.reserve(data->cones.size());
-  for (const custom_msgs::ConeWithId &c : data->cones) {
-    nodes.emplace_back(c);
+  nodes.reserve(data->track.size());
+  uint32_t id = 0;
+  for (const feb_msgs::msg::Cone &c : data->track) {
+    nodes.emplace_back(c, id);
+    id++;
   }
 
   // Update local coordinates of Nodes (makes original local coords unnecessary)
@@ -66,7 +65,7 @@ void mapCallback(const custom_msgs::ConeWithIdArray::ConstPtr &data) {
 
   // Publish loop and write tracklimits to a file
   if (wayComputer->isLoopClosed()) {
-    pubFull.publish(wayComputer->getPathLimits());
+    // pubFull.publish(wayComputer->getPathLimits());
     Logger::loginfo("Loop closed!");
     std::string loopDir = params->main.package_path + "/loops";
     mkdir(loopDir.c_str(), 0777);
@@ -76,12 +75,12 @@ void mapCallback(const custom_msgs::ConeWithIdArray::ConstPtr &data) {
       Logger::loginfo("Have a good day :)");
       if (params->main.verbose)
         Logger::print_report();
-      ros::shutdown();
+      rclcpp::shutdown();
     }
   }
   // Publish partial
   else {
-    pubPartial.publish(wayComputer->getPathLimits());
+    // pubPartial.publish(wayComputer->getPathLimits());
   }
 
   Logger::tock("total");
@@ -91,21 +90,24 @@ void mapCallback(const custom_msgs::ConeWithIdArray::ConstPtr &data) {
 
 // Main
 int main(int argc, char **argv) {
-  ros::init(argc, argv, "urinay");
+  rclcpp::init(argc, argv);
+  auto node = rclcpp::Node::make_shared("urinay");
+  Logger::nh_ = node;
 
-  ros::NodeHandle *const nh = new ros::NodeHandle;
-
-  params = new Params(nh);
+  params = new Params(node);
   wayComputer = new WayComputer(params->wayComputer);
   Logger::print_immediately = false;
-  Visualization::getInstance().init(nh, params->visualization);
+  Visualization::getInstance().init(node, params->visualization);
 
   // Subscribers & Publishers
-  ros::Subscriber subCones = nh->subscribe(params->main.input_cones_topic, 1, mapCallback);
-  ros::Subscriber subPose = nh->subscribe(params->main.input_pose_topic, 1, &WayComputer::stateCallback, wayComputer);
+  auto subCones = node->create_subscription<feb_msgs::msg::Track>(params->main.input_cones_topic, 1, mapCallback);
+  auto subPose = node->create_subscription<nav_msgs::msg::Odometry>(params->main.input_pose_topic, 1, std::bind(&WayComputer::stateCallback, wayComputer, std::placeholders::_1));
 
-  pubPartial = nh->advertise<custom_msgs::PathLimits>(params->main.output_partial_topic, 1);
-  pubFull = nh->advertise<custom_msgs::PathLimits>(params->main.output_full_topic, 1, true);  // Latch message
+  // pubPartial = nh->advertise<custom_msgs::PathLimits>(params->main.output_partial_topic, 1);
+  // pubFull = nh->advertise<custom_msgs::PathLimits>(params->main.output_full_topic, 1, true);  // Latch message
 
-  ros::spin();
+  rclcpp::spin(node);
+  delete wayComputer;
+  delete params;
+  return 0;
 }

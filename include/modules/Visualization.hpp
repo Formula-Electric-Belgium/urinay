@@ -10,9 +10,9 @@
 
 #pragma once
 
-#include <ros/ros.h>
-#include <visualization_msgs/Marker.h>
-#include <visualization_msgs/MarkerArray.h>
+#include "rclcpp/rclcpp.hpp"
+#include <visualization_msgs/msg/marker.hpp>
+#include <visualization_msgs/msg/marker_array.hpp>
 
 #include "structures/Trace.hpp"
 #include "structures/TraceBuffer.hpp"
@@ -29,8 +29,8 @@ class Visualization {
   /**
    * @brief All Markers publishers.
    */
-  ros::Publisher trianglesPub, wayPub, traceBufferPub;
-  
+  rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr trianglesPub, wayPub, traceBufferPub;
+
   /**
    * @brief All parameters related to the Visualization class.
    */
@@ -39,7 +39,12 @@ class Visualization {
   /**
    * @brief All Markers will be published with this header.
    */
-  std_msgs::Header lastHeader_;
+  std_msgs::msg::Header lastHeader_;
+
+  /**
+   * @brief ROS node pointer, used for logging and other purposes.
+   */
+  rclcpp::Node::SharedPtr nh_;
 
  public:
   /**
@@ -58,7 +63,7 @@ class Visualization {
    * @param[in] nh 
    * @param[in] params 
    */
-  void init(ros::NodeHandle *const nh, const Params::Visualization &params);
+  void init(rclcpp::Node::SharedPtr const nh, const Params::Visualization &params);
   
   /**
    * @brief Sets the \a lastHeader_ attribute, all Markers will be published
@@ -66,7 +71,7 @@ class Visualization {
    * 
    * @param[in] header 
    */
-  void setHeader(const std_msgs::Header &header);
+  void setHeader(const std_msgs::msg::Header &header);
 
   /**
    * @brief Method to visualize an EdgeSet.

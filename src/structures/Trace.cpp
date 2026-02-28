@@ -69,7 +69,7 @@ double Trace::length() const {
 size_t Trace::sizeAheadOfCar() const { return this->size() - this->sizeToCar_; }
 
 Trace Trace::before(const uint64_t &num) const {
-  ROS_ASSERT(this->size() + 1 >= num);
+  rcpputils::assert_true(this->size() + 1 >= num);
   std::shared_ptr<Connection> aux = p;
   for (uint64_t i = 0; i < num; i++) {
     aux = aux->before;
@@ -78,7 +78,7 @@ Trace Trace::before(const uint64_t &num) const {
 }
 
 Trace Trace::first() const {
-  ROS_ASSERT(not empty());
+  rcpputils::assert_true(not empty());
   std::shared_ptr<Connection> lastNotEmpty = p;
   while (lastNotEmpty->before != nullptr) {
     lastNotEmpty = lastNotEmpty->before;
@@ -87,7 +87,7 @@ Trace Trace::first() const {
 }
 
 Trace Trace::second() const {
-  ROS_ASSERT(this->size() >= 2);
+  rcpputils::assert_true(this->size() >= 2);
   std::shared_ptr<Connection> aux = this->p;
   while (aux->size > 2) {
     aux = aux->before;
@@ -96,17 +96,17 @@ Trace Trace::second() const {
 }
 
 const Edge &Trace::edge() const {
-  ROS_ASSERT(not empty());
+  rcpputils::assert_true(not empty());
   return this->p->edge;
 }
 
 const Edge &Trace::beforeBack() const {
-  ROS_ASSERT(this->size() >= 2);
+  rcpputils::assert_true(this->size() >= 2);
   return this->p->before->edge;
 }
 
 const double &Trace::heur() const {
-  ROS_ASSERT(not empty());
+  rcpputils::assert_true(not empty());
   return this->p->heur;
 }
 

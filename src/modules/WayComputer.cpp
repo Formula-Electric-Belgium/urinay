@@ -243,7 +243,7 @@ void WayComputer::computeWay(const std::vector<Edge> &edges, const Params::WayCo
 
   // Main outer loop, every iteration of this loop will involve adding one
   // midpoint to the path.
-  while (ros::ok() and (!params.max_way_horizon_size or traceBuffer.bestTrace().sizeAheadOfCar() <= params.max_way_horizon_size)) {
+  while (rclcpp::ok() and (!params.max_way_horizon_size or traceBuffer.bestTrace().sizeAheadOfCar() <= params.max_way_horizon_size)) {
     // Perform tree search and break the loop if no next edges are found
     bool canContinue = this->treeSearch(traceBuffer, midpointsKDT, edges, params);
     
@@ -279,15 +279,15 @@ WayComputer::WayComputer(const Params::WayComputer &params) : params_(params) {
   this->generalFailsafe_.initGeneral(this->params_.search, this->params_.general_failsafe_safetyFactor, this->params_.failsafe_max_way_horizon_size);
 }
 
-void WayComputer::stateCallback(const nav_msgs::Odometry::ConstPtr &data) {
-  tf::poseMsgToEigen(data->pose.pose, this->localTf_);
+void WayComputer::stateCallback(const nav_msgs::msg::Odometry::ConstSharedPtr &data) {
+  tf2::fromMsg(data->pose.pose, this->localTf_);
 
   this->localTf_ = this->localTf_.inverse();
 
   this->localTfValid_ = true;
 }
 
-void WayComputer::update(TriangleSet &triangulation, const std_msgs::Header &header) {
+void WayComputer::update(TriangleSet &triangulation, const std_msgs::msg::Header &header) {
   // #0: Update last way (this will be used to calculate the raplan flag).
   //     And update stamp.
   this->lastWay_ = this->way_;
@@ -364,34 +364,34 @@ Tracklimits WayComputer::getTracklimits() const {
   return this->wayToPublish_.getTracklimits();
 }
 
-custom_msgs::PathLimits WayComputer::getPathLimits() const {
-  custom_msgs::PathLimits res;
-  res.header = this->lastHeader_;
+// custom_msgs::PathLimits WayComputer::getPathLimits() const {
+//   custom_msgs::PathLimits res;
+//   res.header = this->lastHeader_;
 
-  // res.replan indicates if the Way is different from last iteration's
-  res.new_path = this->way_ != this->lastWay_;
+//   // res.replan indicates if the Way is different from last iteration's
+//   res.new_path = this->way_ != this->lastWay_;
 
-  // res.tracklimits.replan indicates if the n midpoints in front of the car
-  // have varied from last iteration
-  res.new_close_midpoints = this->way_.vitalMidpointsChanged(this->lastWay_);
+//   // res.tracklimits.replan indicates if the n midpoints in front of the car
+//   // have varied from last iteration
+//   res.new_close_midpoints = this->way_.vitalMidpointsChanged(this->lastWay_);
 
-  // Fill path
-  std::vector<Point> path = this->wayToPublish_.getPath();
-  res.path.reserve(path.size());
-  for (const Point &p : path) {
-    res.path.push_back(p.gmPoint());
-  }
+//   // Fill path
+//   std::vector<Point> path = this->wayToPublish_.getPath();
+//   res.path.reserve(path.size());
+//   for (const Point &p : path) {
+//     res.path.push_back(p.gmPoint());
+//   }
 
-  // Fill Tracklimits
-  Tracklimits tracklimits = this->wayToPublish_.getTracklimits();
-  res.tracklimits_left.reserve(tracklimits.first.size());
-  for (const Node &n : tracklimits.first) {
-    res.tracklimits_left.push_back(n.pointGlobal().gmPoint());
-  }
-  res.tracklimits_right.reserve(tracklimits.second.size());
-  for (const Node &n : tracklimits.second) {
-    res.tracklimits_right.push_back(n.pointGlobal().gmPoint());
-  }
+//   // Fill Tracklimits
+//   Tracklimits tracklimits = this->wayToPublish_.getTracklimits();
+//   res.tracklimits_left.reserve(tracklimits.first.size());
+//   for (const Node &n : tracklimits.first) {
+//     res.tracklimits_left.push_back(n.pointGlobal().gmPoint());
+//   }
+//   res.tracklimits_right.reserve(tracklimits.second.size());
+//   for (const Node &n : tracklimits.second) {
+//     res.tracklimits_right.push_back(n.pointGlobal().gmPoint());
+//   }
 
-  return res;
-}
+//   return res;
+// }

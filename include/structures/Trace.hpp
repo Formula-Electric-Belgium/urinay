@@ -10,11 +10,12 @@
 
 #pragma once
 
-#include <ros/ros.h>
+#include "rclcpp/rclcpp.hpp"
 
 #include <iostream>
 #include <memory>
 #include <Eigen/Geometry>
+#include <rcpputils/asserts.hpp>
 
 #include "structures/Edge.hpp"
 #include "utils/Params.hpp"

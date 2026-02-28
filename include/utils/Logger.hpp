@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
 
 #include <map>
 #include <stdexcept>
@@ -30,17 +30,20 @@ class Logger {
    */
   struct Task {
     bool active = true;
-    ros::WallTime startTime;
-    ros::WallDuration total_time_active;
+    rclcpp::Time startTime;
+    rclcpp::Duration total_time_active;
     uint64_t count = 0;
-    ros::WallDuration last_duration, max_duration;
-    Task(const ros::WallTime &_startTime)
-      : startTime(_startTime) {}
-    void activate(const ros::WallTime &_startTime) {
+    rclcpp::Duration last_duration, max_duration;
+    Task(const rclcpp::Time &_startTime)
+      : startTime(_startTime),
+        total_time_active(0, 0),
+        last_duration(0, 0),
+        max_duration(0, 0) {}
+    void activate(const rclcpp::Time &_startTime) {
       startTime = _startTime;
       active = true;
     }
-    ros::WallDuration stop(const ros::WallTime &stopTime) {
+    rclcpp::Duration stop(const rclcpp::Time &stopTime) {
       active = false;
       last_duration = stopTime - startTime;
       total_time_active += last_duration;
@@ -71,6 +74,11 @@ class Logger {
    */
   static bool print_immediately;
 
+    /**
+   * @brief ROS node pointer, used to print log messages with the ROS logger.
+   */
+  static rclcpp::Node::SharedPtr nh_;
+
   /**
    * @brief Creates a clock with name \a clockName.
    * 
@@ -84,7 +92,7 @@ class Logger {
    * 
    * @param[in] clockName 
    */
-  static ros::WallDuration tock(const std::string &clockName);
+  static rclcpp::Duration tock(const std::string &clockName);
 
   /**
    * @brief Appends a msg to be printed in the next log report with "info"
