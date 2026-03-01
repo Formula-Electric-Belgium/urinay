@@ -65,3 +65,8 @@ install(
   TARGETS ${PROJECT_NAME}_exec
   DESTINATION lib/${PROJECT_NAME}
 )
+
+# Install config and launch files
+install(DIRECTORY config launch
+  DESTINATION share/${PROJECT_NAME}/
+)

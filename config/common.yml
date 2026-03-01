@@ -1,16 +1,19 @@
-# I/O Topics
-input_cones_topic:              "/slam/map_with_id"
-input_pose_topic:               "/EKF/odometry"
-# input_pose_topic:               "/limovelo/state"
-output_full_topic:              "/AS/P/pathlimits/full"
-output_partial_topic:           "/AS/P/pathlimits/partial"
+/**:
+  ros__parameters:
 
-verbose:                        false   # bool   [-]   whether or not to display time profiling report, when false, nothing is printed.
+    # I/O Topics
+    input_cones_topic:              "/track_builder_node/track"
+    input_pose_topic:               "/robot/dlio/odom_node/odom"
+    # input_pose_topic:               "/limovelo/state"
+    output_full_topic:              "/AS/P/pathlimits/full"
+    output_partial_topic:           "/AS/P/pathlimits/partial"
 
-# Markers
-publish_markers:                true    # bool   [-]   whether or not to publish the markers.
-visualize_treeSearch:           false   # bool   [-]   if true, the the tree search is visualized with a delay that makes the algorithm not be real-time. Only intended for debug purposes.
-marker_topics:
-  triangulation:                "/AS/P/urinay/markers/triangulation"
-  way:                          "/AS/P/urinay/markers/way"
-  treeSearch:                   "/AS/P/urinay/markers/treeSearch"
+    verbose:                        true   # bool   [-]   whether or not to display time profiling report, when false, nothing is printed.
+
+    # Markers
+    publish_markers:                true    # bool   [-]   whether or not to publish the markers.
+    visualize_treeSearch:           true   # bool   [-]   if true, the the tree search is visualized with a delay that makes the algorithm not be real-time. Only intended for debug purposes.
+    marker_topics:
+      triangulation:                "/AS/P/urinay/markers/triangulation"
+      way:                          "/AS/P/urinay/markers/way"
+      treeSearch:                   "/AS/P/urinay/markers/treeSearch"
