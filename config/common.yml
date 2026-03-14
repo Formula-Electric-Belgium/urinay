@@ -8,11 +8,11 @@
     output_full_topic:              "/AS/P/pathlimits/full"
     output_partial_topic:           "/AS/P/pathlimits/partial"
 
-    verbose:                        true   # bool   [-]   whether or not to display time profiling report, when false, nothing is printed.
+    verbose:                        false   # bool   [-]   whether or not to display time profiling report, when false, nothing is printed.
 
     # Markers
     publish_markers:                true    # bool   [-]   whether or not to publish the markers.
-    visualize_treeSearch:           true   # bool   [-]   if true, the the tree search is visualized with a delay that makes the algorithm not be real-time. Only intended for debug purposes.
+    visualize_treeSearch:           false   # bool   [-]   if true, the the tree search is visualized with a delay that makes the algorithm not be real-time. Only intended for debug purposes.
     marker_topics:
       triangulation:                "/AS/P/urinay/markers/triangulation"
       way:                          "/AS/P/urinay/markers/way"
