@@ -14,8 +14,8 @@
 #include <list>
 #include <deque>
 
-#include "structures/Trace.hpp"
-#include "utils/Params.hpp"
+#include "urinay/structures/Trace.hpp"
+#include "urinay/utils/Params.hpp"
 
 /**
  * @brief Auxiliar type to help with the search.

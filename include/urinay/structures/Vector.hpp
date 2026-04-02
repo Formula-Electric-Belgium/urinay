@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "structures/Point.hpp"
+#include "urinay/structures/Point.hpp"
 
 /**
  * @brief Represents a vector in 2D space, inherits from the Point class.

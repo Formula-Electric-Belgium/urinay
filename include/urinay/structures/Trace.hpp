@@ -17,9 +17,9 @@
 #include <Eigen/Geometry>
 #include <rcpputils/asserts.hpp>
 
-#include "structures/Edge.hpp"
-#include "utils/Params.hpp"
-#include "utils/definitions.hpp"
+#include "urinay/structures/Edge.hpp"
+#include "urinay/utils/Params.hpp"
+#include "urinay/utils/definitions.hpp"
 
 /**
  * @brief Represents a trace, i.e. an edge path in the tree search.

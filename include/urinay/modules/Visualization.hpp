@@ -14,11 +14,11 @@
 #include <visualization_msgs/msg/marker.hpp>
 #include <visualization_msgs/msg/marker_array.hpp>
 
-#include "structures/Trace.hpp"
-#include "structures/TraceBuffer.hpp"
-#include "utils/Params.hpp"
-#include "utils/definitions.hpp"
-#include "utils/Logger.hpp"
+#include "urinay/structures/Trace.hpp"
+#include "urinay/structures/TraceBuffer.hpp"
+#include "urinay/utils/Params.hpp"
+#include "urinay/utils/definitions.hpp"
+#include "urinay/utils/Logger.hpp"
 
 /**
  * @brief Class that implements all necessary functions to visualize all

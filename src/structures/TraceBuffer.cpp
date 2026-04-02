@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2024 TUfast e.V.
  */
 
-#include "structures/TraceBuffer.hpp"
+#include "urinay/structures/TraceBuffer.hpp"
 
 /* ----------------------------- Private Methods ---------------------------- */
 

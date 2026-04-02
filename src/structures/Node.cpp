@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022 BCN eMotorsport
  */
 
-#include "structures/Node.hpp"
+#include "urinay/structures/Node.hpp"
 
 const uint32_t Node::SUPERTRIANGLE_BASEID;
 uint32_t Node::superTriangleNodeNum = 0;

@@ -17,9 +17,9 @@
 #include <unordered_set>
 #include <vector>
 
-#include "structures/Circle.hpp"
-#include "structures/Edge.hpp"
-#include "structures/Node.hpp"
+#include "urinay/structures/Circle.hpp"
+#include "urinay/structures/Edge.hpp"
+#include "urinay/structures/Node.hpp"
 
 /**
  * @brief Represents a triangle, includes all elements to ease the Delaunay

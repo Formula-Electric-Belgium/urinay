@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022 BCN eMotorsport
  */
 
-#include "structures/Trace.hpp"
+#include "urinay/structures/Trace.hpp"
 
 /* ----------------------------- Private Methods ---------------------------- */
 

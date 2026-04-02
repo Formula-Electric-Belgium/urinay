@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022 BCN eMotorsport
  */
 
-#include "modules/DelaunayTri.hpp"
+#include "urinay/modules/DelaunayTri.hpp"
 
 /* ----------------------------- Private Methods ---------------------------- */
 

@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022 BCN eMotorsport
  */
 
-#include "modules/Visualization.hpp"
+#include "urinay/modules/Visualization.hpp"
 
 /* ----------------------------- Private Methods ---------------------------- */
 

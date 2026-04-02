@@ -13,7 +13,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "structures/Node.hpp"
+#include "urinay/structures/Node.hpp"
 
 /**
  * @brief Represents a circle in 2D coordinates.

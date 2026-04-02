@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2023 BCN eMotorsport
  */
 
-#include "utils/Failsafe.hpp"
+#include "urinay/utils/Failsafe.hpp"
 
 /* ----------------------------- Private Methods ---------------------------- */
 

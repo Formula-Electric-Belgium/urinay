@@ -12,8 +12,8 @@
 
 #include <unordered_set>
 
-#include "structures/Edge.hpp"
-#include "structures/Triangle.hpp"
+#include "urinay/structures/Edge.hpp"
+#include "urinay/structures/Triangle.hpp"
 
 
 /**

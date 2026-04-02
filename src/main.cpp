@@ -14,10 +14,10 @@
 
 #include <iostream>
 
-#include "modules/DelaunayTri.hpp"
-#include "modules/Visualization.hpp"
-#include "modules/WayComputer.hpp"
-#include "utils/Logger.hpp"
+#include "urinay/modules/DelaunayTri.hpp"
+#include "urinay/modules/Visualization.hpp"
+#include "urinay/modules/WayComputer.hpp"
+#include "urinay/utils/Logger.hpp"
 
 // Publishers are initialized here
 // rclcpp::Publisher<custom_msgs::msg::PathLimits>::SharedPtr pubPartial;

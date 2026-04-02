@@ -27,7 +27,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "structures/Point.hpp"
+#include "urinay/structures/Point.hpp"
 
 using indexArr = std::vector<size_t>;
 using pointIndex = typename std::pair<Point, size_t>;

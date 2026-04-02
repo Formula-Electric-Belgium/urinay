@@ -19,9 +19,9 @@
 #include <iostream>
 #include <iomanip>
 
-#include "structures/Point.hpp"
-#include "structures/Vector.hpp"
-#include "utils/constants.hpp"
+#include "urinay/structures/Point.hpp"
+#include "urinay/structures/Vector.hpp"
+#include "urinay/utils/constants.hpp"
 
 /**
  * @brief Represents a node, i.e. the useful part of an custom_msgs::ConeWithId

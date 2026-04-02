@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022 BCN eMotorsport
  */
 
-#include "structures/Point.hpp"
+#include "urinay/structures/Point.hpp"
 
 /**
  * CONSTRUCTORS

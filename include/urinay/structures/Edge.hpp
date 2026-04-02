@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "structures/Node.hpp"
-#include "utils/constants.hpp"
+#include "urinay/structures/Node.hpp"
+#include "urinay/utils/constants.hpp"
 
 /**
  * @brief Represents a triangle edge and has all information related to it.

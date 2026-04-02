@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2025 TUfast e.V.
  */
 
-#include "utils/Logger.hpp"
+#include "urinay/utils/Logger.hpp"
 
 std::map<std::string, Logger::Task> Logger::tasks_;
 std::queue<std::string> Logger::info_msgs_, Logger::warn_msgs_;

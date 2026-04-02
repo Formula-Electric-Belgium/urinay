@@ -15,9 +15,9 @@
 #include <iostream>
 #include <vector>
 
-#include "utils/definitions.hpp"
-#include "utils/Logger.hpp"
-#include "structures/Triangle.hpp"
+#include "urinay/utils/definitions.hpp"
+#include "urinay/utils/Logger.hpp"
+#include "urinay/structures/Triangle.hpp"
 
 /**
  * @brief Static class that computes the Delaunay triangulation set

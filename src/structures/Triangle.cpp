@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2022 BCN eMotorsport
  */
 
-#include "structures/Triangle.hpp"
+#include "urinay/structures/Triangle.hpp"
 
 /* ----------------------------- Private Methods ---------------------------- */
 

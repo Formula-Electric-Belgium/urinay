@@ -43,11 +43,20 @@ add_library(${PROJECT_NAME}
   src/utils/Failsafe.cpp
   src/utils/KDTree.cpp
 )
+
+target_include_directories(${PROJECT_NAME}
+  PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
+)
+
 ament_target_dependencies(${PROJECT_NAME} "nav_msgs" "geometry_msgs" "tf2_ros" "rclcpp" "feb_msgs" "visualization_msgs" "Eigen3" "tf2_eigen" "ament_index_cpp")
 ament_target_dependencies(${PROJECT_NAME}_exec "nav_msgs" "geometry_msgs" "tf2_ros" "rclcpp" "feb_msgs" "visualization_msgs" "Eigen3" "tf2_eigen" "ament_index_cpp")
 target_link_libraries(${PROJECT_NAME}_exec ${PROJECT_NAME})
 ament_export_include_directories(include)
 ament_export_libraries(${PROJECT_NAME})
+
+
 ament_package()
 
 install(

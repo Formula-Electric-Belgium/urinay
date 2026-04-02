@@ -19,16 +19,16 @@
 #include <fstream>
 #include <queue>
 
-#include "modules/Visualization.hpp"
-#include "structures/Trace.hpp"
-#include "structures/TraceBuffer.hpp"
-#include "structures/Vector.hpp"
-#include "utils/KDTree.hpp"
-#include "utils/Params.hpp"
-#include "utils/Failsafe.hpp"
-#include "utils/constants.hpp"
-#include "utils/definitions.hpp"
-#include "utils/Logger.hpp"
+#include "urinay/modules/Visualization.hpp"
+#include "urinay/structures/Trace.hpp"
+#include "urinay/structures/TraceBuffer.hpp"
+#include "urinay/structures/Vector.hpp"
+#include "urinay/utils/KDTree.hpp"
+#include "urinay/utils/Params.hpp"
+#include "urinay/utils/Failsafe.hpp"
+#include "urinay/utils/constants.hpp"
+#include "urinay/utils/definitions.hpp"
+#include "urinay/utils/Logger.hpp"
 
 /**
  * @brief A class that has all tools and functions to compute the Way.

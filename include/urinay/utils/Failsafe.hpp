@@ -10,8 +10,8 @@
 
 #pragma once
 
-#include "utils/Params.hpp"
-#include "utils/constants.hpp"
+#include "urinay/utils/Params.hpp"
+#include "urinay/utils/constants.hpp"
 #include <cmath>
 
 /**

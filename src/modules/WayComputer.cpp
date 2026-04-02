@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2025 TUfast e.V.
  */
 
-#include "modules/WayComputer.hpp"
+#include "urinay/modules/WayComputer.hpp"
 
 /* ----------------------------- Private Methods ---------------------------- */
 
